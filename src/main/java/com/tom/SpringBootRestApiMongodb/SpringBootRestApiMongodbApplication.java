@@ -27,12 +27,12 @@ public class SpringBootRestApiMongodbApplication {
 			);
 
 			Student student = new Student(
-					"tomek",
-					"ociepa",
-					"tom@gmail.com",
+					"klaudia",
+					"quirini",
+					"klaudia@gmail.com",
 					Gender.MALE,
 					address,
-					List.of("Computer Science"),
+					List.of("Computer Science, Books, Musics"),
 					BigDecimal.TEN,
 					LocalDateTime.now()
 			);
