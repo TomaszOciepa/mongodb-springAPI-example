@@ -42,23 +42,33 @@ public class SpringBootRestApiMongodbApplication {
 					LocalDateTime.now()
 			);
 
-			Query query = new Query();
-			query.addCriteria(Criteria.where("email").is(email));
+//			usingMongoTemplateAndQuery(repository, mongoTemplate, email, student);
 
-			List<Student> students = mongoTemplate.find(query, Student.class);
-
-			if(students.size() > 1){
-				throw new IllegalStateException("found many students with email "+ email);
-			}
-
-			if (students.isEmpty()){
-				System.out.println("Insteting student "+ student);
-				repository.insert(student);
-			}else {
-				System.out.println(student + "already exists");
-			}
-
+			repository.findStudentByEmail(email)
+					.ifPresentOrElse(s ->{
+						System.out.println(s + "already exists");
+					}, ()->{System.out.println("Insteting student "+ student);
+						repository.insert(student);
+					});
 		};
+	}
+
+	private void usingMongoTemplateAndQuery(StudentRepository repository, MongoTemplate mongoTemplate, String email, Student student) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("email").is(email));
+
+		List<Student> students = mongoTemplate.find(query, Student.class);
+
+		if(students.size() > 1){
+			throw new IllegalStateException("found many students with email "+ email);
+		}
+
+		if (students.isEmpty()){
+			System.out.println("Insteting student "+ student);
+			repository.insert(student);
+		}else {
+			System.out.println(student + "already exists");
+		}
 	}
 
 
